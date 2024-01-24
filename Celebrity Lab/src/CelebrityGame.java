@@ -11,20 +11,26 @@ public class CelebrityGame
 	/**
 	 * A reference to a Celebrity or subclass instance.
 	 */
+	private Celebrity gameCelebrity; // current celeb to guess
 
 	/**
 	 * The GUI frame for the Celebrity game.
 	 */
+	private CelebrityFrame gameWindow;
 
 	/**
 	 * The ArrayList of Celebrity values that make up the game
 	 */
+	private ArrayList<Celebrity> allCelebs;
 
 	/**
 	 * Builds the game and starts the GUI
 	 */
 	public CelebrityGame()
 	{
+		// initialize the array list
+		allCelebs = new ArrayList<Celebrity>();
+		gameWindow = new CelebrityFrame(this);
 	}
 
 	/**
@@ -32,6 +38,9 @@ public class CelebrityGame
 	 */
 	public void prepareGame()
 	{
+		allCelebs = new ArrayList<Celebrity>();
+		gameWindow.replaceScreen("Start Game");
+		
 	}
 
 	/**
@@ -44,6 +53,29 @@ public class CelebrityGame
 	 */
 	public boolean processGuess(String guess)
 	{
+		//use the Celebrity instance var to check if their guess is correct
+		
+		//if successful, the Celebrity should be removed from the list
+		//where it was pulled from the "front" of the list
+		if(guess.toLowerCase().trim().equals(gameCelebrity.getAnswer().toLowerCase().trim())) {
+			
+			//remove at index 0 from the list
+			this.allCelebs.remove(0); //removes object at index 0
+			
+			//if the list is NOT empty, assign a new celebrity
+			//else assign an empty celebrity object (empty strings for the answer and clue)
+			if(allCelebs.size() > 0) {
+				//assign new celebrity to guess
+				gameCelebrity = allCelebs.get(0);
+			}else {
+				//out of celebrities, just set it to a "blank" Celebrity object
+				gameCelebrity = new Celebrity("", ""); //out of clues
+			}
+			
+			//return true inside here since it was a correct guess
+			return true; //method is non-void! should return true/false correctly
+			
+		}
 		return false;
 	}
 
@@ -55,6 +87,16 @@ public class CelebrityGame
 	public void play()
 	{
 		
+		if(this.gameCelebrity != null && this.allCelebs.size() > 0) { // check if list is not empty, check that the current celebrity is not null
+			
+			// set the celebrity to be the first one in the list
+			this.gameCelebrity = this.allCelebs.get(0); //from front of list
+			
+			//(given) - start the game
+			gameWindow.replaceScreen("GAME");
+			
+		} // otherwise not ready to play
+			
 	}
 
 	/**
